@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 #[derive(Default)]
 pub struct BoardRenderer {
     // Use BTreeMap to sort based on TaskState
-    task_idxs_by_state: BTreeMap<TaskState, Vec<usize>>,
+    tasks_idxs_by_state: BTreeMap<TaskState, Vec<usize>>,
 
     focus_col: TaskState,
     focus_list_idx: usize,
@@ -19,13 +19,13 @@ pub struct BoardRenderer {
 
 impl Renderer for BoardRenderer {
     fn render(&self, frame: &mut ratatui::Frame, data: &TaskData) {
-        let col_constraints = self.task_idxs_by_state.iter().map(|_| Constraint::Fill(1));
+        let col_constraints = self.tasks_idxs_by_state.iter().map(|_| Constraint::Fill(1));
         let col_areas = Layout::default()
             .direction(Direction::Horizontal)
             .constraints(col_constraints)
             .split(frame.area());
 
-        for (col_idx, (state, task_idxs)) in self.task_idxs_by_state.iter().enumerate() {
+        for (col_idx, (state, task_idxs)) in self.tasks_idxs_by_state.iter().enumerate() {
             let mut list_state = ListState::default();
             let mut list_items: Vec<Text> = Vec::with_capacity(task_idxs.len());
 
@@ -49,11 +49,11 @@ impl Renderer for BoardRenderer {
     }
 
     fn updated(&mut self, data: &TaskData, _operation: crate::operation::Operation) {
-        self.task_idxs_by_state.clear();
+        self.tasks_idxs_by_state.clear();
 
         for (idx, task) in data.tasks.iter().enumerate() {
             let list = self
-                .task_idxs_by_state
+                .tasks_idxs_by_state
                 .entry(task.state)
                 .or_insert_with(Vec::new);
 
@@ -71,7 +71,7 @@ impl Renderer for BoardRenderer {
     }
 
     fn pressed_j(&self, _data: &TaskData) -> Operation {
-        match self.task_idxs_by_state.get(&self.focus_col) {
+        match self.tasks_idxs_by_state.get(&self.focus_col) {
             Some(task_idxs) => {
                 if task_idxs.is_empty() {
                     Operation::None
@@ -86,7 +86,7 @@ impl Renderer for BoardRenderer {
     }
 
     fn pressed_k(&self, _data: &TaskData) -> Operation {
-        match self.task_idxs_by_state.get(&self.focus_col) {
+        match self.tasks_idxs_by_state.get(&self.focus_col) {
             Some(task_idxs) => {
                 if task_idxs.is_empty() {
                     Operation::None
