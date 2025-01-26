@@ -66,7 +66,7 @@ impl Renderer for BoardRenderer {
         }
     }
 
-    fn pressed_h(&self, data: &TaskData) -> Operation {
+    fn pressed_h(&self, _data: &TaskData) -> Operation {
         return Operation::None;
     }
 
@@ -100,23 +100,23 @@ impl Renderer for BoardRenderer {
         }
     }
 
-    fn pressed_l(&self, data: &TaskData) -> Operation {
+    fn pressed_l(&self, _data: &TaskData) -> Operation {
         return Operation::None;
     }
 
-    fn pressed_H(&self, data: &TaskData) -> Operation {
+    fn pressed_H(&self, _data: &TaskData) -> Operation {
         return Operation::None;
     }
 
-    fn pressed_J(&self, data: &TaskData) -> Operation {
+    fn pressed_J(&self, _data: &TaskData) -> Operation {
         return Operation::None;
     }
 
-    fn pressed_K(&self, data: &TaskData) -> Operation {
+    fn pressed_K(&self, _data: &TaskData) -> Operation {
         return Operation::None;
     }
 
-    fn pressed_L(&self, data: &TaskData) -> Operation {
+    fn pressed_L(&self, _data: &TaskData) -> Operation {
         return Operation::None;
     }
 }
