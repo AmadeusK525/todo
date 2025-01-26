@@ -67,7 +67,24 @@ impl Renderer for BoardRenderer {
     }
 
     fn pressed_h(&self, _data: &TaskData) -> Operation {
-        return Operation::None;
+        match self.tasks_idxs_by_state.keys().position(|k| k == &self.focus_col) {
+            Some(focus_col_idx) => {
+                let new_focus_col = if focus_col_idx == 0 {
+                    self.tasks_idxs_by_state.keys().last()
+                } else {
+                    self.tasks_idxs_by_state.keys().nth(focus_col_idx - 1)
+                }
+                .unwrap();
+
+                let new_focus_col_idxs = self.tasks_idxs_by_state.get(new_focus_col).unwrap();
+                let new_focus_list_idx = self.focus_list_idx.clamp(0, new_focus_col_idxs.len() - 1);
+
+                let new_focus_idx = new_focus_col_idxs[new_focus_list_idx];
+
+                Operation::Focus(new_focus_idx)
+            }
+            None => Operation::None,
+        }
     }
 
     fn pressed_j(&self, _data: &TaskData) -> Operation {
@@ -101,7 +118,24 @@ impl Renderer for BoardRenderer {
     }
 
     fn pressed_l(&self, _data: &TaskData) -> Operation {
-        return Operation::None;
+        match self.tasks_idxs_by_state.keys().position(|k| k == &self.focus_col) {
+            Some(focus_col_idx) => {
+                let new_focus_col = if focus_col_idx >= self.tasks_idxs_by_state.len() - 1 {
+                    self.tasks_idxs_by_state.keys().nth(0)
+                } else {
+                    self.tasks_idxs_by_state.keys().nth(focus_col_idx + 1)
+                }
+                .unwrap();
+
+                let new_focus_col_idxs = self.tasks_idxs_by_state.get(new_focus_col).unwrap();
+                let new_focus_list_idx = self.focus_list_idx.clamp(0, new_focus_col_idxs.len() - 1);
+
+                let new_focus_idx = new_focus_col_idxs[new_focus_list_idx];
+
+                Operation::Focus(new_focus_idx)
+            }
+            None => Operation::None,
+        }
     }
 
     fn pressed_H(&self, _data: &TaskData) -> Operation {
